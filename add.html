@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Global Metrics | Add</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href='/style.css' rel='stylesheet'>
+  <style>
+    .input-group {
+        display: flex;
+        align-items: center;
+    }
+
+    .input-group-text {
+        margin-right: 10px;
+    }
+
+    .dropdown {
+        position: relative;
+    }
+
+    .dropdown-btn {
+        padding: 10px;
+        border: 1px solid #ccc;
+        background-color: #fff;
+        cursor: pointer;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 200px;
+        border: 1px solid #ccc;
+        z-index: 1;
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    .dropdown-content label {
+        display: block;
+        padding: 5px 10px;
+    }
+
+    .dropdown-content label:hover {
+        background-color: #f1f1f1;
+    }
+
+    .dropdown-content.active {
+        display: block;
+    }
+  </style>
+</head>
+<body class="p-3 m-0 border-0 bd-example m-0 border-0" style="background-color: #E0E1DD;">
+  <!-- Barra de navegación -->
+  <nav class="navbar" style="background-color: #1B263B;">
+    <div class="container-fluid">
+      <a class="navbar-brand" style="color: #E0E1DD; font-size: 20px;" href="/index.html">
+        <img src="./resources/logo-GM.jpg" alt="Logo-GM" style="width: 210px; height: 40px; border-radius: 15px;">
+      </a>
+      <div class="d-flex">
+        <form class="d-flex me-2" role="search">
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success" type="submit" style="border-color: #E0E1DD; color: #E0E1DD">Search</button>
+        </form>
+        <button class="btn btn-outline-success" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" style="border-color: #E0E1DD;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-funnel" viewBox="0 0 16 16" style="color: white">
+            <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Contenido del offcanvas de filtros-->
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasRightLabel">Filters</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+      <button type="button" class="btn btn-primary">Sort by Name</button>
+    </div>
+  </div>
+
+  <!-- Segundo "nav"-->
+  <ul class="nav nav-underline justify-content-center">
+    <li class="nav-item">
+      <a class="nav-link" aria-current="page" href="/index.html" style="color:#1B263B; font-size: 18px;">Home</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link active" href="/add.html" style="color:#1B263B; font-size: 18px;" aria-current="page">Add</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/delete.html" style="color:#1B263B; font-size: 18px;" aria-current="page">Delete</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/modify.html" style="color:#1B263B; font-size: 18px;" aria-current="page">Modify</a>
+    </li>
+  </ul>
+
+  <form id="addServiceForm" action="/api/services" method="POST" enctype="multipart/form-data">
+    <div class="container mt-5">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title">Complete the fields</h5>
+        </div>
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="form-inline ml-auto d-flex align-items-center">
+              <label for="serviceDate" class="mr-2 mb-0" style="margin-right: 8px;">Date:</label>
+              <input type="date" id="serviceDate" name="serviceDate" required class="form-control">
+            </div>
+          </div>
+          <div class="input-group mb-3">
+            <span for="producerName" class="input-group-text">Producer name</span>
+            <input type="text" id="producerName" name="producerName" required class="form-control">
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text" for="location">Location</span>
+            <input type="text" name="location" id="location" required class="form-control">
+            <span class="input-group-text" for="premises" style="margin-left: 10px;">Premises</span>
+            <input type="text" name="premises" id="premises" required class="form-control">
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text">Service code</span>
+            <div class="dropdown">
+              <button type="button" class="dropdown-btn">Select</button>
+              <div class="dropdown-content" id="codeDropdown">
+                <label><input type="checkbox" data-name="Guano Sprayado" value="1"> GS01</label>
+                <label><input type="checkbox" data-name="Ortofoto" value="2"> O02</label>
+                <label><input type="checkbox" data-name="Ortofoto 3D" value="3"> O303</label>
+                <label><input type="checkbox" data-name="Medicion de Terreno" value="4"> MT04</label>
+                <label><input type="checkbox" data-name="Curvas de Nivel" value="5"> CN05</label>
+                <label><input type="checkbox" data-name="Modelo Digital de Elevacion" value="6"> MDE06</label>
+                <label><input type="checkbox" data-name="Sprayado de hervisida" value="7"> SH07</label>
+                <label><input type="checkbox" data-name="Sprayado de Insecticida" value="8"> SI08</label>
+                <label><input type="checkbox" data-name="Puntos de Control" value="9"> PC09</label>
+                <label><input type="checkbox" data-name="GPS" value="10"> G10</label>
+                <label><input type="checkbox" data-name="Modelo Digital del Terreno" value="11"> GDT11</label>
+                <label><input type="checkbox" data-name="Batimetria" value="12"> B12</label>
+                <label><input type="checkbox" data-name="Servicio de MattePort 3D" value="13"> SM313</label>
+                <label><input type="checkbox" data-name="Analisis del Suelo" value="14"> AS14</label>
+                <label><input type="checkbox" data-name="Levantamiento de Topografia" value="15"> LT15</label>
+              </div>
+            </div>
+            <span class="input-group-text" style="margin-left: 10px;">Service name</span>
+            <div class="dropdown">
+              <button type="button" class="dropdown-btn">Select</button>
+              <div class="dropdown-content" id="nameDropdown">
+                <label><input type="checkbox" data-code="1" value="1"> Guano Sprayado</label>
+                <label><input type="checkbox" data-code="2" value="2"> Ortofoto</label>
+                <label><input type="checkbox" data-code="3" value="3"> Ortofoto 3D</label>
+                <label><input type="checkbox" data-code="4" value="4"> Medicion de Terreno</label>
+                <label><input type="checkbox" data-code="5" value="5"> Curvas de Nivel</label>
+                <label><input type="checkbox" data-code="6" value="6"> Modelo Digital de Elevacion</label>
+                <label><input type="checkbox" data-code="7" value="7"> Sprayado de hervisida</label>
+                <label><input type="checkbox" data-code="8" value="8"> Sprayado de Insecticida</label>
+                <label><input type="checkbox" data-code="9" value="9"> Puntos de Control</label>
+                <label><input type="checkbox" data-code="10" value="10"> GPS</label>
+                <label><input type="checkbox" data-code="11" value="11"> Modelo Digital del Terreno</label>
+                <label><input type="checkbox" data-code="12" value="12"> Batimetria</label>
+                <label><input type="checkbox" data-code="13" value="13"> Servicio de MattePort 3D</label>
+                <label><input type="checkbox" data-code="14" value="14"> Analisis del Suelo</label>
+                <label><input type="checkbox" data-code="15" value="15"> Levantamiento de Topografia</label>
+              </div>
+            </div>
+            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" style="margin-left: 10px;">Add new service</button>
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">New service</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="mb-3">
+                      <label for="newServiceName" class="col-form-label">Service name</label>
+                      <input type="text" class="form-control" id="newServiceName">
+                    </div>
+                    <div class="mb-3">
+                      <label for="newServiceCode" class="col-form-label">Service code</label>
+                      <input type="text" class="form-control" id="newServiceCode">
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="addServiceBtn">Add</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="input-group mb-3" enctype="multipart/form-data">
+            <label for="image" style="margin-right: 4px;">Upload image:</label>
+            <input type="file" id="image" name="image"><br>
+          </div>
+          <div class="input-group mb-3" enctype="multipart/form-data">
+            <label for="kmlKmzFile" style="margin-right: 4px;">Upload KML, KMZ file:</label>
+            <input type="file" name="kmlKmzFile" id="kmlKmzFile" accept=".kml,.kmz" required>
+          </div>
+          <div class="mb-3">
+            <label for="notes-text" class="col-form-label">Notes:</label>
+            <textarea class="form-control" id="notes-text" style="width: 1083px;"></textarea>
+          </div>
+        </div>
+        <div class="card-footer text-end">
+          <button type="button" class="btn btn-secondary">Cancel</button>
+          <button type="submit" class="btn btn-success">Save</button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const dropdownBtns = document.querySelectorAll('.dropdown-btn');
+      dropdownBtns.forEach((dropdownBtn) => {
+        dropdownBtn.addEventListener('click', () => {
+          const dropdownContent = dropdownBtn.nextElementSibling;
+          dropdownContent.classList.toggle('active');
+          dropdownBtn.classList.toggle('active');
+        });
+
+        document.addEventListener('click', (event) => {
+          if (!dropdownBtn.contains(event.target) && !dropdownBtn.nextElementSibling.contains(event.target)) {
+            dropdownBtn.nextElementSibling.classList.remove('active');
+            dropdownBtn.classList.remove('active');
+          }
+        });
+      });
+
+      const codeCheckboxes = document.querySelectorAll('#codeDropdown input[type="checkbox"]');
+      const nameCheckboxes = document.querySelectorAll('#nameDropdown input[type="checkbox"]');
+
+      function syncCheckboxes(checkboxesToSync, relatedCheckboxes, attributeName) {
+        checkboxesToSync.forEach((checkbox) => {
+          checkbox.addEventListener('change', () => {
+            const value = checkbox.value;
+            const isChecked = checkbox.checked;
+            relatedCheckboxes.forEach((relatedCheckbox) => {
+              if (relatedCheckbox.dataset[attributeName] == value) {
+                relatedCheckbox.checked = isChecked;
+              }
+            });
+          });
+        });
+      }
+
+      syncCheckboxes(codeCheckboxes, nameCheckboxes, 'name');
+      syncCheckboxes(nameCheckboxes, codeCheckboxes, 'code');
+
+      document.getElementById('addServiceBtn').addEventListener('click', () => {
+        const name = document.getElementById('newServiceName').value;
+        const code = document.getElementById('newServiceCode').value;
+
+        if (name && code) {
+          const codeDropdown = document.getElementById('codeDropdown');
+          const nameDropdown = document.getElementById('nameDropdown');
+
+          const newCodeOption = document.createElement('label');
+          newCodeOption.innerHTML = `<input type="checkbox" data-name="${name}" value="${code}"> ${code}`;
+          codeDropdown.appendChild(newCodeOption);
+
+          const newNameOption = document.createElement('label');
+          newNameOption.innerHTML = `<input type="checkbox" data-code="${code}" value="${code}"> ${name}`;
+          nameDropdown.appendChild(newNameOption);
+
+          const modal = bootstrap.Modal.getInstance(document.getElementById('exampleModal'));
+          modal.hide();
+        }
+      });
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
